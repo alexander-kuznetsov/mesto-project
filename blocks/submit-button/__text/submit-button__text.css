@@ -1,0 +1,17 @@
+.submit-button__text {
+    font-size: 18px;
+    line-height: 22px;
+    text-align: center;
+    color: #FFFFFF;
+    font-family: 'Inter', sans-serif;
+    font-style: normal;
+    font-weight: normal;
+}
+
+@media screen and (max-width: 550px) {
+    .submit-button__text {
+        font-size: 14px;
+        line-height: 17px;
+        text-align: center;
+    }
+}

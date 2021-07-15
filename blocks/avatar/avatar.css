@@ -4,6 +4,7 @@
     column-gap: 30px;
     align-items: center;
 }
+
 @media screen and (max-width: 700px) {
     .avatar {
         row-gap: 26px;
@@ -13,6 +14,7 @@
 
     }
 }
+
 @media screen and (max-width: 500px) {
     .avatar {
         row-gap: 26px;

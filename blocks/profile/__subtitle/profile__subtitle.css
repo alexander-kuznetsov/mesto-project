@@ -8,6 +8,7 @@
     color: #FFFFFF;
     margin: 0;
 }
+
 @media screen and (max-width: 500px) {
     .profile__subtitle {
         font-size: 14px;

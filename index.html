@@ -15,58 +15,75 @@
         <img class="avatar__image profile__avatar" src="images/profile/__avatar/Cousteau.png" alt="Жак-Ив Кусто">
         <div class="profile__info">
             <h1 class="profile__title">Жак-Ив Кусто</h1>
-            <div class="edit-button profile__edit-button"></div>
+            <div class="edit-button profile__edit-button page__cursor"></div>
             <p class="profile__subtitle">Исследователь океана</p>
         </div>
     </div>
 
-    <div class="add-button profile__add-button"></div>
+    <div class="add-button profile__add-button page__cursor"></div>
 </section>
 <section class="places">
     <div class="place">
         <img class="place__image" src="images/place/karachaevsk.png" alt="Карачаевск">
         <div class="place__title-like">
             <h2 class="place__title">Карачаевск</h2>
-            <div class="like place__like"></div>
+            <div class="like place__like page__cursor"></div>
         </div>
-
     </div>
     <div class="place">
         <img class="place__image" src="images/place/elbrus.png" alt="Эльбрус">
         <div class="place__title-like">
             <h2 class="place__title">Гора Эльбрус</h2>
-            <div class="like place__like"></div>
+            <div class="like place__like page__cursor"></div>
         </div>
     </div>
     <div class="place">
         <img class="place__image" src="images/place/dombai.png" alt="Домбай">
         <div class="place__title-like">
             <h2 class="place__title">Домбай</h2>
-            <div class="like place__like"></div>
+            <div class="like place__like page__cursor"></div>
         </div>
     </div>
     <div class="place">
         <img class="place__image" src="images/place/elbrus.png" alt="Гора Эльбрус">
         <div class="place__title-like">
             <h2 class="place__title">Гора Эльбрус</h2>
-            <div class="like place__like"></div>
+            <div class="like place__like page__cursor"></div>
         </div>
     </div>
     <div class="place">
         <img class="place__image" src="images/place/dombai.png" alt="Домбай">
         <div class="place__title-like">
             <h2 class="place__title">Домбай</h2>
-            <div class="like place__like"></div>
+            <div class="like place__like page__cursor"></div>
         </div>
     </div>
     <div class="place">
         <img class="place__image" src="images/place/karachaevsk-small.png" alt="Карачаевск">
         <div class="place__title-like">
             <h2 class="place__title">Карачаево-Черкесия</h2>
-            <div class="like place__like"></div>
+            <div class="like place__like page__cursor"></div>
         </div>
     </div>
 </section>
 <footer class="footer page__section">&#169; 2020 Mesto Russia</footer>
+
+<div class="popup popup_opened">
+    <div class="popup__container">
+        <h3 class="popup__title">Редактировать профиль</h3>
+        <form class="popup__form">
+            <fieldset class="popup__form-name">
+                <label class="popup__label">
+                    <input class="popup__input" type="text">
+                </label>
+                <label class="popup__label">
+                    <input class="popup__input" type="text">
+                </label>
+                <button class="submit-button submit-button__text popup__submit-button page__cursor">Сохранить</button>
+            </fieldset>
+        </form>
+        <button class="close-button popup__close-button page__cursor"></button>
+    </div>
+</div>
 </body>
 </html>

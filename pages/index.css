@@ -1,30 +1,37 @@
+@import url("../vendor/normalize.css");
 @import url("../vendor/fonts/fonts.css");
-
+@import url("../blocks/popup/popup.css");
+@import url("../blocks/popup/_opened/popup_opened.css");
+@import url("../blocks/popup/__container/popup__container.css");
+@import url("../blocks/popup/__title/popup__title.css");
+@import url("../blocks/popup/__form-name/popup__form-name.css");
+@import url("../blocks/popup/__input/popup__input.css");
+@import url("../blocks/popup/__label/popup__label.css");
+@import url("../blocks/popup/__submit-button/popup__submit-button.css");
+@import url("../blocks/popup/__close-button/popup__close-button.css");
+@import url("../blocks/page/__cursor/page__cursor.css");
 @import url("../blocks/edit-button/edit-button.css");
 @import url("../blocks/add-button/add-button.css");
+@import url("../blocks/close-button/close-button.css");
+@import url("../blocks/submit-button/submit-button.css");
+@import url("../blocks/submit-button/__text/submit-button__text.css");
 @import url("../blocks/logo/logo.css");
-
 @import url("../blocks/page/__section/page__section.css");
 @import url("../blocks/header/header.css");
 @import url("../blocks/page/page.css");
-
-
 @import url("../blocks/avatar/avatar.css");
 @import url("../blocks/avatar/__image/avatar__image.css");
-
 @import url("../blocks/profile/profile.css");
 @import url("../blocks/profile/__info/profile__info.css");
 @import url("../blocks/profile/__title/profile__title.css");
 @import url("../blocks/profile/__subtitle/profile__subtitle.css");
 @import url("../blocks/profile/__edit-button/profile__edit-button.css");
 @import url("../blocks/profile/__add-button/profile__add-button.css");
-
 @import url("../blocks/places/places.css");
 @import url("../blocks/place/place.css");
 @import url("../blocks/place/__title-like/place__title-like.css");
 @import url("../blocks/place/__image/place__image.css");
 @import url("../blocks/place/__title/place__title.css");
-
 @import url("../blocks/like/like.css");
 @import url("../blocks/place/__like/place__like.css");
 @import url("../blocks/footer/footer.css");

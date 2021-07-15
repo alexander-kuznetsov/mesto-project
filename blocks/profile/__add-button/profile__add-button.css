@@ -1,6 +1,7 @@
 .profile__add-button {
     align-self: center;
 }
+
 @media screen and (max-width: 500px) {
     .profile__add-button {
         justify-self: center;
