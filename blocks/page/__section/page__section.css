@@ -6,7 +6,5 @@
     .page__section {
         max-width: 918px;
         box-sizing: border-box;
-        padding-left: 19px;
-        padding-right: 19px;
     }
 }
