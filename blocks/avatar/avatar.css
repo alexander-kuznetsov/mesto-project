@@ -1,0 +1,21 @@
+.avatar {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(min-content, max-content));
+    column-gap: 30px;
+    align-items: center;
+}
+@media screen and (max-width: 700px) {
+    .avatar {
+        row-gap: 26px;
+        justify-items: center;
+        grid-template-columns: minmax(min-content, max-content);
+        grid-template-rows: repeat(2, minmax(min-content, max-content));
+
+    }
+}
+@media screen and (max-width: 500px) {
+    .avatar {
+        row-gap: 26px;
+        grid-template-columns: 282px;
+    }
+}

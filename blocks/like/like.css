@@ -1,0 +1,15 @@
+.like {
+    margin: 0;
+    background-image: url("../../images/like/disabled.svg");
+    width: 22px;
+    height: 19px;
+}
+.like:hover {
+    background-image: url("../../images/like/hover.svg");
+}
+.like:disabled {
+    background-image: url("../../images/like/disabled.svg");
+}
+.like:active {
+    background-image: url("../../images/like/active.svg");
+}
