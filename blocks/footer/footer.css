@@ -1,18 +1,10 @@
 .footer {
-    font-family: 'Inter', sans-serif;
-    font-style: normal;
-    font-weight: normal;
-    font-size: 18px;
-    line-height: 22px;
-    color: #545454;
     padding-top: 66px;
     margin: 0;
 }
 
 @media screen and (max-width: 900px) {
     .footer {
-        font-size: 14px;
-        line-height: 17px;
         padding-top: 48px;
         padding-left: 19px;
         padding-right: 19px;
