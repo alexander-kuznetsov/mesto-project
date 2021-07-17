@@ -1,4 +1,4 @@
-.button__type_close {
+.button_type_close {
     position: absolute;
     right: -40px;
     top: -40px;
@@ -15,14 +15,14 @@
 }
 
 @media screen and (min-width: 400px) {
-    .button__type_close:hover {
+    .button_type_close:hover {
         opacity: 0.6;
         transition: opacity 0.2s linear;
     }
 }
 
 @media screen and (max-width: 550px) {
-    .button__type_close {
+    .button_type_close {
         right: 0;
         top: -36px;
         width: 20px;
