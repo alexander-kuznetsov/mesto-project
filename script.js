@@ -1,21 +1,22 @@
-/*-------------------Common functions--------------------*/
+/*-------------------Common--------------------*/
 function openPopup(popup) {
     popup.classList.add('popup_opened');
 }
 function closePopup(popup) {
     popup.classList.remove('popup_opened');
 }
-function getProfileTitle() {
-    return document.querySelector('.profile__title');
-}
-function getProfileSubtitle() {
-    return document.querySelector('.profile__subtitle');
-}
+const profileTitle = document.querySelector('.profile__title');
+const profileSubtitle = document.querySelector('.profile__subtitle');
 
 /* ---------------------------------FORM POPUP----------------------------------------*/
-function renderFormPopup(formPopup, popupInfo) {
-    formPopup.querySelector('.popup__title').textContent = popupInfo.title;
-    formPopup.querySelectorAll('.popup__input').forEach(input => {
+const formPopup = document.querySelector('.popup_form');
+const formPopupTitle = formPopup.querySelector('.popup__title');
+const formPopupInputs = formPopup.querySelectorAll('.popup__input');
+const formPopupSaveButton = formPopup.querySelector('.button__save');
+
+function renderFormPopup(popupInfo) {
+    formPopupTitle.textContent = popupInfo.title;
+    formPopupInputs.forEach(input => {
         switch (input.name) {
             case 'firstFormInput': input.placeholder = popupInfo.firstInputPlaceHolder;
                 input.value = '';
@@ -25,21 +26,20 @@ function renderFormPopup(formPopup, popupInfo) {
                 break;
         }
     });
-    formPopup.querySelector('.button__save').textContent = popupInfo.buttonText;
+    formPopupSaveButton.textContent = popupInfo.buttonText;
 }
 
 function formPopupSubmitHandler(evt) {
     evt.preventDefault();
     console.log(evt);
     const buttonText = evt.target.querySelector('.button__save').innerText;
-    const popup = document.querySelector('.popup');
-    const firstInputValue = getPopupInputValue('firstFormInput', popup);
-    const secondInputValue = getPopupInputValue('secondFormInput', popup);
+    const firstInputValue = getPopupInputValue('firstFormInput');
+    const secondInputValue = getPopupInputValue('secondFormInput');
 
     if (buttonText === 'Сохранить') {
         if (firstInputValue !== '') {
-            getProfileTitle().textContent = firstInputValue;
-            getProfileSubtitle().textContent = secondInputValue !== ''? secondInputValue : 'Профессия не указана';
+            profileTitle.textContent = firstInputValue;
+            profileSubtitle.textContent = secondInputValue !== ''? secondInputValue : 'Профессия не указана';
         }
 
     } else if (buttonText === 'Создать') {
@@ -49,27 +49,31 @@ function formPopupSubmitHandler(evt) {
             );
         }
     }
-    closePopup(popup);
+    closePopup(formPopup);
 }
-function getPopupInputValue(inputName, formPopup) {
-    return Array.from(formPopup.querySelectorAll('.popup__input'))
+function getPopupInputValue(inputName) {
+    return Array.from(formPopupInputs)
         .find(item => item.name === inputName).value;
 }
 
-document.querySelector('.popup_form')
+formPopup
     .querySelector('.popup__form')
-    .addEventListener('submit', formPopupSubmitHandler);
+    .addEventListener(
+        'submit',
+        formPopupSubmitHandler
+    );
 
 /* -----------------------------IMAGE POPUP-------------------------------------*/
+const popupImageBlock = document.querySelector('.popup_image');
+const popupImageElem = popupImageBlock.querySelector('.popup__image');
+
 function renderImagePopup(imageInfo) {
-    const popupImageElem = document.querySelector('.popup_image');
-    const popupImage = popupImageElem.querySelector('.popup__image');
-    popupImage.src = imageInfo.imageElem.src;
-    popupImage.alt = imageInfo.imageElem.alt;
+    popupImageElem.src = imageInfo.imageElem.src;
+    popupImageElem.alt = imageInfo.imageElem.alt;
 
-    popupImageElem.querySelector('.popup__image-caption').textContent = imageInfo.caption;
+    popupImageBlock.querySelector('.popup__image-caption').textContent = imageInfo.caption;
 
-    return popupImageElem;
+    return popupImageBlock;
 }
 
 /* -----------------------------EDIT BUTTON-------------------------------------*/
@@ -81,14 +85,14 @@ editButton.addEventListener('click', _ => {
         secondInputPlaceHolder: 'Профессия',
         buttonText: 'Сохранить'
     };
-    const formPopup = document.querySelector('.popup');
-    renderFormPopup(formPopup, profilePopupInfo);
-    const profileInputs = formPopup.querySelectorAll('.popup__input');
-    profileInputs.forEach(input => {
+
+    renderFormPopup(profilePopupInfo);
+
+    formPopupInputs.forEach(input => {
         switch (input.name) {
-            case 'firstFormInput': input.value = getProfileTitle().textContent;
+            case 'firstFormInput': input.value = profileTitle.textContent;
                 break;
-            case 'secondFormInput': input.value = getProfileSubtitle().textContent;
+            case 'secondFormInput': input.value = profileSubtitle.textContent;
                 break;
         }
     })
@@ -113,11 +117,9 @@ addButton.addEventListener('click', _ => {
         secondInputPlaceHolder: 'Ссылка на карточку',
         buttonText: 'Создать'
     };
-    const formPopup = document.querySelector('.popup_form');
-    renderFormPopup(formPopup, placePopupInfo);
+    renderFormPopup(placePopupInfo);
     openPopup(formPopup);
 });
-
 
 /*---------------------------------------PLACES INIT-----------------------------------------*/
 const initialCards = [
@@ -146,14 +148,15 @@ const initialCards = [
         link: 'https://pictures.s3.yandex.net/frontend-developer/cards-compressed/baikal.jpg'
     }
 ];
+
+const cardTemplate = document.querySelector('#place-card').content;
+
 initialCards.forEach(item => {
     addPlace(
         createPlace(item.name, item.link)
     );
 });
-
 function createPlace(name, link) {
-    const cardTemplate = document.querySelector('#place-card').content;
     const nextCard = cardTemplate.cloneNode(true);
 
     const placeImage = nextCard.querySelector('.place__image');
@@ -189,7 +192,3 @@ function addPlace(place) {
     const places = document.querySelector('.places');
     places.prepend(place);
 }
-
-
-
-
