@@ -1,0 +1,9 @@
+.button {
+    position: relative;
+    border: none;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    cursor: url("../../images/cursor/cursor.svg") 11 0, pointer;
+    justify-items: end;
+}
