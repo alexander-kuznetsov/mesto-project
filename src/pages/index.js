@@ -1,25 +1,27 @@
-import '../pages/index.css';
+import './index.css';
 
-import {changeButtonState, checkInputValidity, enableValidation} from "./validation";
+import {changeButtonState, checkInputValidity, enableValidation} from "../components/validation";
 import {
-    allPopups, cardPopup,
+    allPopups,
+    cardPopup,
+    cardSubmitHandler,
     close,
-    closeOnEscape,
     closeOnOverlay,
     getPopupInput,
-    open, profilePopup, submitPopupHandler
-} from "./modal";
+    open,
+    profilePopup,
+    profileSubmitHandler
+} from "../components/modal";
 
-const page = document.querySelector('.page');
 export const profileTitle = document.querySelector('.profile__title');
 export const profileSubtitle = document.querySelector('.profile__subtitle');
 const profilePopupInputs = profilePopup.querySelectorAll('.popup__input');
-const inputNameElem = getPopupInput(profilePopupInputs, 'firstFormInput');
-const inputJobElem = getPopupInput(profilePopupInputs, 'secondFormInput');
+const cardPopupInputs = cardPopup.querySelectorAll('.popup__input');
 const editButton = document.querySelector('.button__edit');
 const closeButtons = document.querySelectorAll('.button__close');
 const addButton = document.querySelector('.button__add');
-const saveButton = document.querySelector('.button__save');
+const profileSaveButton = profilePopup.querySelector('.button__save');
+const cardSaveButton = cardPopup.querySelector('.button__save');
 
 const validationSettings = {
     inputSelector: '.popup__input',
@@ -30,46 +32,53 @@ const validationSettings = {
 }
 
 /*----------------------------------Event Handling--------------------------------------------*/
-Array.from([profilePopup, cardPopup])
-    .forEach(popup => {
-        popup.addEventListener(
-            'submit', evt => {
-                submitPopupHandler(evt);
-                close(popup);
-            }
-        );
-    });
+profilePopup.addEventListener(
+    'submit', evt => {
+        profileSubmitHandler(evt);
+        close(profilePopup);
+    }
+)
+cardPopup.addEventListener(
+    'submit', evt => {
+        cardSubmitHandler(evt);
+        close(cardPopup);
+    }
+);
 
 editButton.addEventListener('click', _ => {
+    const inputNameElem = getPopupInput(profilePopupInputs, 'firstFormInput');
+    const inputJobElem = getPopupInput(profilePopupInputs, 'secondFormInput');
     inputNameElem.value = profileTitle.textContent;
     inputJobElem.value = profileSubtitle.textContent;
     checkInputValidity(
         profilePopup,
-        [inputNameElem, inputJobElem],
+        profilePopupInputs,
         validationSettings.inputErrorClass
     );
     changeButtonState(
         [inputNameElem, inputJobElem],
-        saveButton,
+        profileSaveButton,
         validationSettings.inactiveButtonClass
     );
     open(profilePopup)
 });
 
 closeButtons.forEach(button => {
-   button.addEventListener('click',evt => {
-       close(evt.target.closest('.popup'));
-   });
+    button.addEventListener('click', evt => {
+        close(evt.target.closest('.popup'));
+    });
 });
 addButton.addEventListener('click', _ => {
+    changeButtonState(
+        cardPopupInputs,
+        cardSaveButton,
+        validationSettings.inactiveButtonClass
+    );
     open(cardPopup);
 });
-page.addEventListener('keydown', closeOnEscape)
 
 allPopups.forEach(popup => {
-    popup.addEventListener('click', evt => {
-        closeOnOverlay(popup, evt);
-    })
+    popup.addEventListener('click', closeOnOverlay);
 });
 
 enableValidation(validationSettings);

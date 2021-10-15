@@ -1,5 +1,3 @@
-const forms = Array.from(document.forms);
-
 export function checkInputValidity(formElement, inputElements, inputErrorClass) {
     inputElements.forEach(inputElement => {
         if (inputElement.validity.valid) {
@@ -23,7 +21,7 @@ function hideError(formElement, inputElement, inputErrorClass) {
 }
 
 export function changeButtonState(formInputs, buttonElement, inactiveButtonClass) {
-    const isFormInvalid = formInputs.some(input => {
+    const isFormInvalid = Array.from(formInputs).some(input => {
         return !input.validity.valid
     });
     if (isFormInvalid) {
@@ -35,7 +33,7 @@ export function changeButtonState(formInputs, buttonElement, inactiveButtonClass
     }
 }
 export function enableValidation(settings) {
-    forms.forEach(form => {
+    Array.from(document.forms).forEach(form => {
         const popupInputs = Array.from(form.querySelectorAll(settings.inputSelector));
         const button = form.querySelector(settings.submitButtonSelector);
         changeButtonState(popupInputs, button, settings.inactiveButtonClass);

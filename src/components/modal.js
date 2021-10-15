@@ -1,5 +1,5 @@
 import {createPlace, placesElem} from "./card";
-import {profileSubtitle, profileTitle} from "./index";
+import {profileSubtitle, profileTitle} from "../pages";
 
 export const profilePopup = document.querySelector('.popup_type_profile');
 export const imagePopup = document.querySelector('.popup_type_image');
@@ -7,13 +7,15 @@ export const cardPopup = document.querySelector('.popup_type_card');
 export const allPopups = document.querySelectorAll('.popup');
 const imagePopupElem = imagePopup.querySelector('.popup__image');
 const imagePopupCaptionElem = imagePopup.querySelector('.popup__image-caption');
-
+const page = document.querySelector('.page');
 
 export function open(popup) {
+    page.addEventListener('keydown', closeOnEscape);
     popup.classList.add('popup_opened');
 }
 
 export function close(popup) {
+    page.removeEventListener('keydown', closeOnEscape);
     popup.classList.remove('popup_opened');
 }
 
@@ -38,28 +40,32 @@ export function closeOnEscape(evt) {
     }
 }
 
-export function closeOnOverlay(popup, evt) {
+export function closeOnOverlay(evt) {
     if (evt.target.classList.contains('popup')) {
-        close(popup);
+        close(evt.target);
     }
 }
-
-export function submitPopupHandler(evt) {
+export function profileSubmitHandler(evt) {
     evt.preventDefault();
-    const popup = evt.currentTarget;
     const inputs = evt.target.querySelectorAll('.popup__input');
     const firstInput = getPopupInput(inputs, 'firstFormInput');
     const secondInput = getPopupInput(inputs, 'secondFormInput');
-
-    if (popup.classList.contains('popup_type_card')) {
-        placesElem.prepend(createPlace(firstInput.value, secondInput.value));
-    } else {
-        profileTitle.textContent = firstInput.value;
-        profileSubtitle.textContent = secondInput.value;
-    }
+    profileTitle.textContent = firstInput.value;
+    profileSubtitle.textContent = secondInput.value;
+}
+export function cardSubmitHandler(evt) {
+    evt.preventDefault();
+    const inputs = evt.target.querySelectorAll('.popup__input');
+    const firstInput = getPopupInput(inputs, 'firstFormInput');
+    const secondInput = getPopupInput(inputs, 'secondFormInput');
+    placesElem.prepend(createPlace(firstInput.value, secondInput.value));
+    clearInputs(inputs);
+}
+function clearInputs(inputElements) {
+    Array.from(inputElements)
+        .forEach(inputElement => inputElement.value = "");
 }
 
-export function getPopupInput(popupInputs, inputName) {
-    return Array.from(popupInputs)
-        .find(item => item.name === inputName);
+export function getPopupInput(popupInputsElements, inputName) {
+    return Array.from(popupInputsElements).find(item => item.name === inputName);
 }
