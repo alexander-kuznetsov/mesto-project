@@ -1,0 +1,6 @@
+.profile__image-overlay:hover {
+    margin: 0;
+    background-color: rgba(0, 0, 0, 0.8);
+    transition: background-color 0.5s linear;
+    cursor: url("../../../images/cursor/avatar-cursor.svg") 11 0, pointer;
+}
