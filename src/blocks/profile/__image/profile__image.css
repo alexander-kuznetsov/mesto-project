@@ -3,4 +3,7 @@
     height: 120px;
     object-fit: cover;
     border-radius: 50%;
+    background-color: #FF0000;
+    position: relative;
+    z-index: -1;
 }

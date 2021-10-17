@@ -1,12 +1,7 @@
-import {createPlace, placesElem} from "./card";
-import {profileSubtitle, profileTitle} from "../pages";
+import {allPopups, createPlace} from "./card";
+import {getUserInfo, saveCard, saveProfileInfo, updateAvatar} from "./api";
+import {avatarImage, placesElem, profileSubtitle, profileTitle} from "../pages";
 
-export const profilePopup = document.querySelector('.popup_type_profile');
-export const imagePopup = document.querySelector('.popup_type_image');
-export const cardPopup = document.querySelector('.popup_type_card');
-export const allPopups = document.querySelectorAll('.popup');
-const imagePopupElem = imagePopup.querySelector('.popup__image');
-const imagePopupCaptionElem = imagePopup.querySelector('.popup__image-caption');
 const page = document.querySelector('.page');
 
 export function open(popup) {
@@ -25,12 +20,6 @@ export function findOpened(popupArray) {
     });
 }
 
-export function setCardPopupContent(link, name) {
-    imagePopupElem.src = link;
-    imagePopupElem.alt = name;
-    imagePopupCaptionElem.textContent = name;
-}
-
 export function closeOnEscape(evt) {
     if (evt.key === 'Escape') {
         const openedPopup = findOpened(allPopups);
@@ -41,7 +30,7 @@ export function closeOnEscape(evt) {
 }
 
 export function closeOnOverlay(evt) {
-    if (evt.target.classList.contains('popup')) {
+    if (evt.target.classList.contains('.popup')) {
         close(evt.target);
     }
 }
@@ -50,17 +39,51 @@ export function profileSubmitHandler(evt) {
     const inputs = evt.target.querySelectorAll('.popup__input');
     const firstInput = getPopupInput(inputs, 'firstFormInput');
     const secondInput = getPopupInput(inputs, 'secondFormInput');
-    profileTitle.textContent = firstInput.value;
-    profileSubtitle.textContent = secondInput.value;
+
+    loadingButton(evt.target, true);
+    saveProfileInfo(firstInput.value, secondInput.value)
+        .then(profileInfo => {
+            profileTitle.textContent = profileInfo.name;
+            profileSubtitle.textContent = profileInfo.about;
+        })
+        .catch(err => console.log(err))
+        .finally(() => loadingButton(evt.target, false));
 }
 export function cardSubmitHandler(evt) {
     evt.preventDefault();
     const inputs = evt.target.querySelectorAll('.popup__input');
     const firstInput = getPopupInput(inputs, 'firstFormInput');
     const secondInput = getPopupInput(inputs, 'secondFormInput');
-    placesElem.prepend(createPlace(firstInput.value, secondInput.value));
+    loadingButton(evt.target, true);
+    saveCard(firstInput.value, secondInput.value)
+        .then(cardInfo => {
+            getUserInfo()
+                .then(userInfo => {
+                    placesElem.prepend(
+                        createPlace(
+                            cardInfo,
+                            userInfo._id
+                        )
+                    );
+                }).catch(err => console.log(err));
+        })
+        .catch(err => console.log(err))
+        .finally(() => loadingButton(evt.target, false));
+
     clearInputs(inputs);
 }
+
+export function avatarSubmitHandler(evt) {
+    evt.preventDefault();
+    const avatarLinkInput = evt.target.querySelector('.popup__input');
+    loadingButton(evt.target, true);
+    updateAvatar(avatarLinkInput.value)
+        .catch(err => console.log(err))
+        .finally(() => loadingButton(evt.target, false));
+    avatarImage.src = avatarLinkInput.value;
+    clearInputs([avatarLinkInput]);
+}
+
 function clearInputs(inputElements) {
     Array.from(inputElements)
         .forEach(inputElement => inputElement.value = "");
@@ -68,4 +91,10 @@ function clearInputs(inputElements) {
 
 export function getPopupInput(popupInputsElements, inputName) {
     return Array.from(popupInputsElements).find(item => item.name === inputName);
+}
+
+function loadingButton(form, isLoading) {
+    const button = form.querySelector('.button');
+    const buttonText = button.textContent;
+    button.textContent = isLoading? `${buttonText}...`: buttonText.substring(0, buttonText.length);
 }

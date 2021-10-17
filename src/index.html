@@ -13,7 +13,10 @@
 <main class="page__section">
     <section class="profile">
         <div class="profile__avatar">
-            <img class="profile__image profile__avatar" src="<%=require('./images/profile/__avatar/Cousteau.png')%>" alt="Жак-Ив Кусто">
+            <a class="profile__image-overlay">
+                <img class = "profile__image" src="<%=require('./images/profile/__avatar/Cousteau.png')%>" alt="Жак-Ив Кусто">
+            </a>
+
             <div class="profile__info">
                 <h1 class="profile__title">Жак-Ив Кусто</h1>
                 <button type="button" class="button button__edit profile__edit-button"></button>
@@ -31,7 +34,10 @@
                 </a>
                 <div class="place__title-like">
                     <h2 class="place__title"></h2>
-                    <button type="button" class="button button__like" aria-label="like"></button>
+                    <div>
+                        <button type="button" class="button button__like" aria-label="like"></button>
+                        <p class="place__like-count"></p>
+                    </div>
                 </div>
             </div>
         </template>
@@ -76,6 +82,21 @@
                     <span class="popup__input-error place-url-input-error"></span>
                 </label>
                 <button type="submit" class="button button__save">Создать</button>
+            </fieldset>
+        </form>
+        <button type="button" class="button button__close"></button>
+    </div>
+</div>
+<div class="popup popup_type_avatar">
+    <div class="popup__container">
+        <h3 class="popup__title">Обновить аватар</h3>
+        <form name="profile" class="popup__form" novalidate>
+            <fieldset class="popup__form-name">
+                <label class="popup__label">
+                    <input name="firstFormInput" class="popup__input" id="avatar-link-input" type="url" placeholder="ссылка на аватар" required>
+                    <span class="popup__input-error avatar-link-input-error"></span>
+                </label>
+                <button type="submit" class="button button__save">Сохранить</button>
             </fieldset>
         </form>
         <button type="button" class="button button__close"></button>

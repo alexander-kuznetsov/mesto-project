@@ -1,28 +1,16 @@
 import './index.css';
-
 import {changeButtonState, checkInputValidity, enableValidation} from "../components/validation";
+import {getUserInfo} from "../components/api";
 import {
-    allPopups,
-    cardPopup,
+    avatarSubmitHandler,
     cardSubmitHandler,
-    close,
-    closeOnOverlay,
     getPopupInput,
+    profileSubmitHandler,
+    close,
     open,
-    profilePopup,
-    profileSubmitHandler
+    closeOnOverlay
 } from "../components/modal";
-
-export const profileTitle = document.querySelector('.profile__title');
-export const profileSubtitle = document.querySelector('.profile__subtitle');
-const profilePopupInputs = profilePopup.querySelectorAll('.popup__input');
-const cardPopupInputs = cardPopup.querySelectorAll('.popup__input');
-const editButton = document.querySelector('.button__edit');
-const closeButtons = document.querySelectorAll('.button__close');
-const addButton = document.querySelector('.button__add');
-const profileSaveButton = profilePopup.querySelector('.button__save');
-const cardSaveButton = cardPopup.querySelector('.button__save');
-
+import {allPopups, avatarPopup, cardPopup, profilePopup} from "../components/card";
 const validationSettings = {
     inputSelector: '.popup__input',
     submitButtonSelector: '.button',
@@ -30,6 +18,30 @@ const validationSettings = {
     inputErrorClass: 'popup__input_type_error',
     errorClass: 'popup__error_visible'
 }
+/*-------------------------------Profile Info-----------------------------------*/
+export const profileTitle = document.querySelector('.profile__title');
+export const profileSubtitle = document.querySelector('.profile__subtitle');
+export const avatarImage = document.querySelector('.profile__image');
+
+/*-------------------------------Inputs-----------------------------------*/
+const avatarOverlay = document.querySelector('.profile__image-overlay');
+const profilePopupInputs = profilePopup.querySelectorAll('.popup__input');
+const avatarFormInput = avatarPopup.querySelector('.popup__input');
+const cardPopupInputs = cardPopup.querySelectorAll('.popup__input');
+
+/*-------------------------------Buttons-----------------------------------*/
+const editButton = document.querySelector('.button__edit');
+const closeButtons = document.querySelectorAll('.button__close');
+const addButton = document.querySelector('.button__add');
+const profileSaveButton = profilePopup.querySelector('.button__save');
+const cardSaveButton = cardPopup.querySelector('.button__save');
+export const placesElem = document.querySelector('.places');
+
+getUserInfo().then(userInfo => {
+    profileTitle.textContent = userInfo.name;
+    profileSubtitle.textContent = userInfo.about;
+    avatarImage.src = userInfo.avatar
+}).catch(err => console.log(err));
 
 /*----------------------------------Event Handling--------------------------------------------*/
 profilePopup.addEventListener(
@@ -44,6 +56,13 @@ cardPopup.addEventListener(
         close(cardPopup);
     }
 );
+avatarPopup.addEventListener(
+    'submit', evt => {
+        avatarSubmitHandler(evt);
+        close(avatarPopup);
+    }
+);
+
 
 editButton.addEventListener('click', _ => {
     const inputNameElem = getPopupInput(profilePopupInputs, 'firstFormInput');
@@ -76,13 +95,18 @@ addButton.addEventListener('click', _ => {
     );
     open(cardPopup);
 });
-
+avatarOverlay.addEventListener('click', _ => {
+        changeButtonState(
+            [avatarFormInput],
+            cardSaveButton,
+            validationSettings.inactiveButtonClass
+        );
+        open(avatarPopup);
+    }
+);
 allPopups.forEach(popup => {
     popup.addEventListener('click', closeOnOverlay);
 });
 
+
 enableValidation(validationSettings);
-
-
-
-
