@@ -30,7 +30,7 @@ export function closeOnEscape(evt) {
 }
 
 export function closeOnOverlay(evt) {
-    if (evt.target.classList.contains('.popup')) {
+    if (evt.target.classList.contains('popup')) {
         close(evt.target);
     }
 }
