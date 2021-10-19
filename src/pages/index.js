@@ -1,6 +1,6 @@
 import './index.css';
 import {changeButtonState, checkInputValidity, enableValidation} from "../components/validation";
-import {getUserInfo} from "../components/api";
+import {getInitialCards, getUserInfo} from "../components/api";
 import {
     avatarSubmitHandler,
     cardSubmitHandler,
@@ -10,7 +10,9 @@ import {
     open,
     closeOnOverlay
 } from "../components/modal";
-import {allPopups, avatarPopup, cardPopup, profilePopup} from "../components/card";
+import {allPopups, avatarPopup, cardPopup, profilePopup, renderCards} from "../components/card";
+
+
 const validationSettings = {
     inputSelector: '.popup__input',
     submitButtonSelector: '.button',
@@ -28,6 +30,8 @@ const avatarOverlay = document.querySelector('.profile__image-overlay');
 const profilePopupInputs = profilePopup.querySelectorAll('.popup__input');
 const avatarFormInput = avatarPopup.querySelector('.popup__input');
 const cardPopupInputs = cardPopup.querySelectorAll('.popup__input');
+const inputNameElem = getPopupInput(profilePopupInputs, 'firstFormInput');
+const inputJobElem = getPopupInput(profilePopupInputs, 'secondFormInput');
 
 /*-------------------------------Buttons-----------------------------------*/
 const editButton = document.querySelector('.button__edit');
@@ -36,37 +40,28 @@ const addButton = document.querySelector('.button__add');
 const profileSaveButton = profilePopup.querySelector('.button__save');
 const cardSaveButton = cardPopup.querySelector('.button__save');
 export const placesElem = document.querySelector('.places');
+export let userId;
 
-getUserInfo().then(userInfo => {
-    profileTitle.textContent = userInfo.name;
-    profileSubtitle.textContent = userInfo.about;
-    avatarImage.src = userInfo.avatar
-}).catch(err => console.log(err));
+Promise.all([getUserInfo(), getInitialCards()])
+    .then(resultArray => {
+            const userInfo = resultArray[0];
+            profileTitle.textContent = userInfo.name;
+            profileSubtitle.textContent = userInfo.about;
+            avatarImage.src = userInfo.avatar
+            userId = userInfo._id;
+
+            const cardsArray = resultArray[1];
+            renderCards(cardsArray)
+        }
+    ).catch(err => console.log(err));
 
 /*----------------------------------Event Handling--------------------------------------------*/
-profilePopup.addEventListener(
-    'submit', evt => {
-        profileSubmitHandler(evt);
-        close(profilePopup);
-    }
-)
-cardPopup.addEventListener(
-    'submit', evt => {
-        cardSubmitHandler(evt);
-        close(cardPopup);
-    }
-);
-avatarPopup.addEventListener(
-    'submit', evt => {
-        avatarSubmitHandler(evt);
-        close(avatarPopup);
-    }
-);
+profilePopup.addEventListener('submit', profileSubmitHandler);
+cardPopup.addEventListener('submit', cardSubmitHandler);
+avatarPopup.addEventListener('submit', avatarSubmitHandler);
 
 
 editButton.addEventListener('click', _ => {
-    const inputNameElem = getPopupInput(profilePopupInputs, 'firstFormInput');
-    const inputJobElem = getPopupInput(profilePopupInputs, 'secondFormInput');
     inputNameElem.value = profileTitle.textContent;
     inputJobElem.value = profileSubtitle.textContent;
     checkInputValidity(

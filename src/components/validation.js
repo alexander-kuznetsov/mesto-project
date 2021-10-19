@@ -37,7 +37,6 @@ export function enableValidation(settings) {
         const popupInputs = Array.from(form.querySelectorAll(settings.inputSelector));
         const button = form.querySelector(settings.submitButtonSelector);
         changeButtonState(popupInputs, button, settings.inactiveButtonClass);
-
         popupInputs.forEach(input => {
             input.addEventListener('input', _ => {
                 checkInputValidity(form, [input], settings.inputErrorClass);

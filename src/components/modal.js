@@ -1,6 +1,6 @@
-import {allPopups, createPlace} from "./card";
-import {getUserInfo, saveCard, saveProfileInfo, updateAvatar} from "./api";
-import {avatarImage, placesElem, profileSubtitle, profileTitle} from "../pages";
+import {allPopups, avatarPopup, cardPopup, createPlace, profilePopup} from "./card";
+import {saveCard, saveProfileInfo, updateAvatar} from "./api";
+import {avatarImage, placesElem, profileSubtitle, profileTitle, userId} from "../pages";
 
 const page = document.querySelector('.page');
 
@@ -45,6 +45,7 @@ export function profileSubmitHandler(evt) {
         .then(profileInfo => {
             profileTitle.textContent = profileInfo.name;
             profileSubtitle.textContent = profileInfo.about;
+            close(profilePopup);
         })
         .catch(err => console.log(err))
         .finally(() => loadingButton(evt.target, false));
@@ -57,20 +58,17 @@ export function cardSubmitHandler(evt) {
     loadingButton(evt.target, true);
     saveCard(firstInput.value, secondInput.value)
         .then(cardInfo => {
-            getUserInfo()
-                .then(userInfo => {
-                    placesElem.prepend(
-                        createPlace(
-                            cardInfo,
-                            userInfo._id
-                        )
-                    );
-                }).catch(err => console.log(err));
+            placesElem.prepend(
+                createPlace(
+                    cardInfo,
+                    userId
+                )
+            );
+            close(cardPopup);
+            clearInputs(inputs);
         })
         .catch(err => console.log(err))
         .finally(() => loadingButton(evt.target, false));
-
-    clearInputs(inputs);
 }
 
 export function avatarSubmitHandler(evt) {
@@ -78,10 +76,13 @@ export function avatarSubmitHandler(evt) {
     const avatarLinkInput = evt.target.querySelector('.popup__input');
     loadingButton(evt.target, true);
     updateAvatar(avatarLinkInput.value)
+        .then(_ => {
+            avatarImage.src = avatarLinkInput.value;
+            clearInputs([avatarLinkInput]);
+            close(avatarPopup);
+        })
         .catch(err => console.log(err))
         .finally(() => loadingButton(evt.target, false));
-    avatarImage.src = avatarLinkInput.value;
-    clearInputs([avatarLinkInput]);
 }
 
 function clearInputs(inputElements) {
@@ -96,5 +97,5 @@ export function getPopupInput(popupInputsElements, inputName) {
 function loadingButton(form, isLoading) {
     const button = form.querySelector('.button');
     const buttonText = button.textContent;
-    button.textContent = isLoading? `${buttonText}...`: buttonText.substring(0, buttonText.length);
+    button.textContent = isLoading? `${buttonText}...`: buttonText.substring(0, buttonText.length - 3);
 }

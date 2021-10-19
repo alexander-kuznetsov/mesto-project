@@ -1,135 +1,92 @@
 const cohortId = "plus-cohort-2";
 const authToken = "755b9008-e161-4a71-9b33-376d2b5a566b";
-
+const baseUrl = "https://nomoreparties.co/v1/";
+const authHeader = { authorization: authToken }
+const headersWithContentType = {
+    authorization: authToken,
+    'Content-Type': 'application/json'
+}
 export function getUserInfo() {
     return fetch(
-        `https://nomoreparties.co/v1/${cohortId}/users/me`,
+        `${baseUrl}${cohortId}/users/me`,
         {
-            headers: {
-                authorization: authToken
-            }
+            headers: authHeader
         }
-    ).then(result => {
-        if (result.ok) {
-            return result.json();
-        }
-        return Promise.reject(`На запрос получения информации о пользователе 
-        вернулся ответ со статусом ${result.status}.`)
-    });
+    ).then(result => checkResponse(result));
 }
 
 export function getInitialCards() {
     return fetch(
-        `https://nomoreparties.co/v1/${cohortId}/cards`,
+        `${baseUrl}${cohortId}/cards`,
         {
-            headers: {
-                authorization: authToken
-            }
+            headers: authHeader
         }
-    ).then(result => {
-        if (result.ok) {
-            return result.json();
-        }
-        return Promise.reject(`На запрос получения карточек вернулся ответ со статусом ${result.status}.`)
-    });
+    ).then(result => checkResponse(result));
 }
 
 export function saveProfileInfo(name, about) {
     return fetch(
-        `https://nomoreparties.co/v1/${cohortId}/users/me`,
+        `${baseUrl}${cohortId}/users/me`,
         {
             method: 'PATCH',
-            headers: {
-                authorization: authToken,
-                'Content-Type': 'application/json'
-            },
+            headers: headersWithContentType,
             body: JSON.stringify({
                 name: name,
                 about: about
             })
         }
-    ).then(result => {
-        if (result.ok) {
-            return result.json();
-        }
-        return Promise.reject(`На запрос сохранения информации о пользователе 
-        вернулся ответ со статусом ${result.status}.`)
-    });
+    ).then(result => checkResponse(result));
 }
 export function saveCard(name, link) {
     return fetch(
-        `https://nomoreparties.co/v1/${cohortId}/cards`,
+        `${baseUrl}${cohortId}/cards`,
         {
             method: 'POST',
-            headers: {
-                authorization: authToken,
-                'Content-Type': 'application/json'
-            },
+            headers: headersWithContentType,
             body: JSON.stringify({
                 name: name,
                 link: link
             })
         }
-    ).then(result => {
-        if (result.ok) {
-            return result.json();
-        }
-        return Promise.reject(`На запрос сохранения информации о пользователе 
-        вернулся ответ со статусом ${result.status}.`)
-    });
+    ).then(result => checkResponse(result));
 }
 
 export function deleteCard(cardId){
     return  fetch(
-        `https://nomoreparties.co/v1/${cohortId}/cards/${cardId}`,
+        `${baseUrl}${cohortId}/cards/${cardId}`,
         {
             method: 'DELETE',
-            headers: {
-                authorization: authToken
-            }
+            headers: authHeader
         }
-    ).then(result => {
-        if (!result.ok) {
-            return Promise.reject(`На запрос сохранения информации о пользователе 
-        вернулся ответ со статусом ${result.status}.`)
-        }
-    });
+    ).then(result => checkResponse(result));
 }
 export function addOrDeleteLike(cardId, method) {
     return  fetch(
-        `https://nomoreparties.co/v1/${cohortId}/cards/likes/${cardId}`,
+        `${baseUrl}${cohortId}/cards/likes/${cardId}`,
         {
             method: method,
-            headers: {
-                authorization: authToken
-            }
+            headers: authHeader
         }
-    ).then(result => {
-        if (result.ok) {
-            return result.json();
-        }
-        return Promise.reject(`На запрос сохранения информации о пользователе 
-        вернулся ответ со статусом ${result.status}.`)
-    });
+    ).then(result => checkResponse(result));
 }
 
 export function updateAvatar(avatarLink) {
     return fetch(
-        `https://nomoreparties.co/v1/${cohortId}/users/me/avatar`,
+        `${baseUrl}${cohortId}/users/me/avatar`,
         {
             method: 'PATCH',
-            headers: {
-                authorization: authToken,
-                'Content-Type': 'application/json'
-            },
+            headers: headersWithContentType,
             body: JSON.stringify({
                 avatar: avatarLink
             })
         }
-    ).then(result => {
-        if (!result.ok) {
-            return Promise.reject(`На запрос сохранения аватарки вернулся ответ со статусом ${result.status}.`)
-        }
-    });
+    ).then(result => checkResponse(result));
 }
 
+function checkResponse(result) {
+    if (!result.ok) {
+        return Promise.reject(`Ошибка, статус: ${result.status}.`)
+    } else {
+        return result.json();
+    }
+}
