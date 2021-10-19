@@ -1,6 +1,6 @@
 /*-------------------------------Popups-----------------------------------*/
-import {addOrDeleteLike, deleteCard, getInitialCards, getUserInfo} from "./api";
-import {placesElem} from "../pages";
+import {addOrDeleteLike, deleteCard} from "./api";
+import {placesElem, userId} from "../pages";
 import {open} from "./modal";
 
 export const imagePopup = document.querySelector('.popup_type_image');
@@ -21,7 +21,7 @@ export function createPlace(cardInfo, userId) {
     nextCard.querySelector('.button__like')
         .addEventListener('click', evt => {
             const buttonLike = evt.target;
-            let method = buttonLike.classList
+            const method = buttonLike.classList
                 .contains('button__like_active') ? 'DELETE' : 'PUT';
             addOrDeleteLike(cardInfo._id, method)
                 .then(cardInfo => {
@@ -30,7 +30,7 @@ export function createPlace(cardInfo, userId) {
                     card.querySelector('.place__like-count').textContent =
                         Array.from(cardInfo.likes).length.toString();
                     buttonLike.classList.toggle('button__like_active');
-                });
+                }).catch(err => console.log(err));
         });
 
     if (userId !== cardInfo.owner._id) {
@@ -41,7 +41,8 @@ export function createPlace(cardInfo, userId) {
         nextCard.querySelector('.button__remove')
             .addEventListener('click', evt => {
                 deleteCard(cardInfo._id)
-                    .then(() => evt.target.closest('.place').remove());
+                    .then(() => evt.target.closest('.place').remove())
+                    .catch(err => console.log(err));
             });
     }
 
@@ -79,22 +80,11 @@ function setCardContent(nextCard, cardInfo, userId) {
         Array.from(cardInfo.likes).length.toString();
 }
 
-function renderCards(initialCards) {
-    getUserInfo().then(userInfo => {
-            Array.from(initialCards).forEach(cardInfo => {
-                placesElem.prepend(
-                    createPlace(
-                        cardInfo,
-                        userInfo._id
-                    )
-                );
-            });
-        }
-    )
+export function renderCards(initialCards) {
+    Array.from(initialCards).forEach(cardInfo => {
+        placesElem.prepend(
+            createPlace(cardInfo, userId)
+        );
+    });
 }
-
-/*----------------------------------Rendering--------------------------------------------*/
-getInitialCards()
-    .then(cardsArray => renderCards(cardsArray))
-    .catch(err => console.log(err));
 
