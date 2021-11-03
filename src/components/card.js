@@ -1,5 +1,5 @@
 /*-------------------------------Popups-----------------------------------*/
-import {addOrDeleteLike, deleteCard} from "./api";
+import { api } from "./api";
 import {placesElem, userId} from "../pages";
 import {open} from "./modal";
 
@@ -14,7 +14,10 @@ const imagePopupElem = imagePopup.querySelector('.popup__image');
 const imagePopupCaptionElem = imagePopup.querySelector('.popup__image-caption');
 
 
-export function createPlace(cardInfo, userId) {
+export function createPlace(
+    cardInfo,
+    userId
+) {
     const nextCard = cardTemplate.cloneNode(true);
     setCardContent(nextCard, cardInfo, userId);
     //Добавляем обработчик лайков
@@ -23,7 +26,7 @@ export function createPlace(cardInfo, userId) {
             const buttonLike = evt.target;
             const method = buttonLike.classList
                 .contains('button__like_active') ? 'DELETE' : 'PUT';
-            addOrDeleteLike(cardInfo._id, method)
+                addOrDeleteLike(cardInfo._id, method)
                 .then(cardInfo => {
                     const cardId = cardInfo._id;
                     const card  = document.querySelector(`#${CSS.escape(cardId)}`);
@@ -86,5 +89,11 @@ export function renderCards(initialCards) {
             createPlace(cardInfo, userId)
         );
     });
+}
+
+class Card {
+    constructor(data, selector){
+        this.selector = selector,
+    }
 }
 

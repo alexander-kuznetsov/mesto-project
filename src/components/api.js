@@ -1,87 +1,11 @@
-const cohortId = "plus-cohort-2";
-const authToken = "755b9008-e161-4a71-9b33-376d2b5a566b";
-const baseUrl = "https://nomoreparties.co/v1/";
-const authHeader = { authorization: authToken }
-const headersWithContentType = {
-    authorization: authToken,
-    'Content-Type': 'application/json'
-}
-export function getUserInfo() {
-    return fetch(
-        `${baseUrl}${cohortId}/users/me`,
-        {
-            headers: authHeader
-        }
-    ).then(result => checkResponse(result));
-}
+// const authToken = "755b9008-e161-4a71-9b33-376d2b5a566b";
+// const baseUrl = "https://nomoreparties.co/v1/";
+// const authHeader = { authorization: authToken }
+// const headersWithContentType = {
+//     authorization: authToken,
+//     'Content-Type': 'application/json'
+// }
 
-export function getInitialCards() {
-    return fetch(
-        `${baseUrl}${cohortId}/cards`,
-        {
-            headers: authHeader
-        }
-    ).then(result => checkResponse(result));
-}
-
-export function saveProfileInfo(name, about) {
-    return fetch(
-        `${baseUrl}${cohortId}/users/me`,
-        {
-            method: 'PATCH',
-            headers: headersWithContentType,
-            body: JSON.stringify({
-                name: name,
-                about: about
-            })
-        }
-    ).then(result => checkResponse(result));
-}
-export function saveCard(name, link) {
-    return fetch(
-        `${baseUrl}${cohortId}/cards`,
-        {
-            method: 'POST',
-            headers: headersWithContentType,
-            body: JSON.stringify({
-                name: name,
-                link: link
-            })
-        }
-    ).then(result => checkResponse(result));
-}
-
-export function deleteCard(cardId){
-    return  fetch(
-        `${baseUrl}${cohortId}/cards/${cardId}`,
-        {
-            method: 'DELETE',
-            headers: authHeader
-        }
-    ).then(result => checkResponse(result));
-}
-export function addOrDeleteLike(cardId, method) {
-    return  fetch(
-        `${baseUrl}${cohortId}/cards/likes/${cardId}`,
-        {
-            method: method,
-            headers: authHeader
-        }
-    ).then(result => checkResponse(result));
-}
-
-export function updateAvatar(avatarLink) {
-    return fetch(
-        `${baseUrl}${cohortId}/users/me/avatar`,
-        {
-            method: 'PATCH',
-            headers: headersWithContentType,
-            body: JSON.stringify({
-                avatar: avatarLink
-            })
-        }
-    ).then(result => checkResponse(result));
-}
 
 function checkResponse(result) {
     if (!result.ok) {
@@ -90,3 +14,100 @@ function checkResponse(result) {
         return result.json();
     }
 }
+
+class Api {
+    constructor(options) {
+        this._baseUrl = options.this._baseUrl;
+        this._headers = options.headers;
+    }
+
+    getUserInfo() {
+        return fetch(
+            `${this._baseUrl}/users/me`,
+            {
+                headers: this._headers.authorization,
+            }
+        ).then(result => checkResponse(result));
+    }
+
+    getInitialCards() {
+        return fetch(
+            `${this._baseUrl}/cards`,
+            {
+                headers: this._headers.authorization,
+            }
+        ).then(result => checkResponse(result));
+    }
+
+    saveProfileInfo(name, about) {
+        return fetch(
+            `${this._baseUrl}/users/me`,
+            {
+                method: 'PATCH',
+                headers: this._headers,
+                body: JSON.stringify({
+                    name: name,
+                    about: about
+                })
+            }
+        ).then(result => checkResponse(result));
+    }
+
+    saveCard(name, link) {
+        return fetch(
+            `${this._baseUrl}/cards`,
+            {
+                method: 'POST',
+                headers: this._headers,
+                body: JSON.stringify({
+                    name: name,
+                    link: link
+                })
+            }
+        ).then(result => checkResponse(result));
+    }
+
+
+    deleteCard(cardId){
+        return  fetch(
+            `${this._baseUrl}/cards/${cardId}`,
+            {
+                method: 'DELETE',
+                headers: this._headers.authorization,
+            }
+        ).then(result => checkResponse(result));
+    }
+
+    addOrDeleteLike(cardId, method) {
+        return  fetch(
+            `${this._baseUrl}/cards/likes/${cardId}`,
+            {
+                method: method,
+                headers: this._headers.authorization
+            }
+        ).then(result => checkResponse(result));
+    }
+
+    updateAvatar(avatarLink) {
+        return fetch(
+            `${this._baseUrl}/users/me/avatar`,
+            {
+                method: 'PATCH',
+                headers: this._headers,
+                body: JSON.stringify({
+                    avatar: avatarLink
+                })
+            }
+        ).then(result => checkResponse(result));
+    }
+}
+
+const options = {
+    baseUrl: "https://nomoreparties.co/v1/plus-cohort-2",
+    headers: {
+        "authorization": "755b9008-e161-4a71-9b33-376d2b5a566b",
+        "Content-Type":"application/json"
+    }
+}
+
+export const api = new Api(options);
