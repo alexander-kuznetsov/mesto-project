@@ -1,23 +1,6 @@
-// const authToken = "755b9008-e161-4a71-9b33-376d2b5a566b";
-// const baseUrl = "https://nomoreparties.co/v1/";
-// const authHeader = { authorization: authToken }
-// const headersWithContentType = {
-//     authorization: authToken,
-//     'Content-Type': 'application/json'
-// }
-
-
-function checkResponse(result) {
-    if (!result.ok) {
-        return Promise.reject(`Ошибка, статус: ${result.status}.`)
-    } else {
-        return result.json();
-    }
-}
-
 class Api {
     constructor(options) {
-        this._baseUrl = options.this._baseUrl;
+        this._baseUrl = options.baseUrl;
         this._headers = options.headers;
     }
 
@@ -25,18 +8,22 @@ class Api {
         return fetch(
             `${this._baseUrl}/users/me`,
             {
-                headers: this._headers.authorization,
+                headers: {
+                    authorization: this._headers.authorization
+                }
             }
-        ).then(result => checkResponse(result));
+        ).then(result => this._checkResponse(result));
     }
 
     getInitialCards() {
         return fetch(
             `${this._baseUrl}/cards`,
             {
-                headers: this._headers.authorization,
+                headers: {
+                    authorization: this._headers.authorization
+                }
             }
-        ).then(result => checkResponse(result));
+        ).then(result => this._checkResponse(result));
     }
 
     saveProfileInfo(name, about) {
@@ -50,7 +37,7 @@ class Api {
                     about: about
                 })
             }
-        ).then(result => checkResponse(result));
+        ).then(result => this._checkResponse(result));
     }
 
     saveCard(name, link) {
@@ -64,7 +51,7 @@ class Api {
                     link: link
                 })
             }
-        ).then(result => checkResponse(result));
+        ).then(result => this._checkResponse(result));
     }
 
 
@@ -73,9 +60,11 @@ class Api {
             `${this._baseUrl}/cards/${cardId}`,
             {
                 method: 'DELETE',
-                headers: this._headers.authorization,
+                headers: {
+                    authorization: this._headers.authorization
+                }
             }
-        ).then(result => checkResponse(result));
+        ).then(result => this._checkResponse(result));
     }
 
     addOrDeleteLike(cardId, method) {
@@ -83,9 +72,11 @@ class Api {
             `${this._baseUrl}/cards/likes/${cardId}`,
             {
                 method: method,
-                headers: this._headers.authorization
+                headers: {
+                    authorization: this._headers.authorization
+                }
             }
-        ).then(result => checkResponse(result));
+        ).then(result => this._checkResponse(result));
     }
 
     updateAvatar(avatarLink) {
@@ -98,16 +89,32 @@ class Api {
                     avatar: avatarLink
                 })
             }
-        ).then(result => checkResponse(result));
+        ).then(result => this._checkResponse(result));
+    }
+    _checkResponse(result) {
+        if (!result.ok) {
+            return Promise.reject(`Ошибка, статус: ${result.status}.`)
+        } else {
+            return result.json();
+        }
     }
 }
 
 const options = {
     baseUrl: "https://nomoreparties.co/v1/plus-cohort-2",
     headers: {
-        "authorization": "755b9008-e161-4a71-9b33-376d2b5a566b",
-        "Content-Type":"application/json"
+        authorization: "755b9008-e161-4a71-9b33-376d2b5a566b",
+        "Content-Type": "application/json"
     }
 }
 
 export const api = new Api(options);
+export const apiFunctions = {
+    addOrDeleteLike: (cardId, method) => { return api.addOrDeleteLike(cardId, method) },
+    deleteCard: (cardId) => { return api.deleteCard(cardId)},
+    updateAvatar: (avatarLink) => { return api.updateAvatar(avatarLink)},
+    saveCard: (name, link) => { return api.saveCard(name, link)},
+    saveProfileInfo: (name, about) => { return api.saveProfileInfo(name, about)},
+    getInitialCards: _ => { return api.getInitialCards()},
+    getUserInfo: _ => { return api.getUserInfo()},
+}

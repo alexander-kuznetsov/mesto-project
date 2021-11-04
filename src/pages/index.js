@@ -1,6 +1,7 @@
 import './index.css';
 import {changeButtonState, checkInputValidity, enableValidation} from "../components/validation";
-import {getInitialCards, getUserInfo} from "../components/api";
+import {api} from "../components/api";
+
 import {
     avatarSubmitHandler,
     cardSubmitHandler,
@@ -42,7 +43,7 @@ const cardSaveButton = cardPopup.querySelector('.button__save');
 export const placesElem = document.querySelector('.places');
 export let userId;
 
-Promise.all([getUserInfo(), getInitialCards()])
+Promise.all([api.getUserInfo(), api.getInitialCards()])
     .then(resultArray => {
             const userInfo = resultArray[0];
             profileTitle.textContent = userInfo.name;

@@ -1,5 +1,5 @@
-import {allPopups, avatarPopup, cardPopup, createPlace, profilePopup} from "./card";
-import {saveCard, saveProfileInfo, updateAvatar} from "./api";
+import {allPopups, avatarPopup, cardPopup, Card, profilePopup} from "./card";
+import {api, apiFunctions} from "./api";
 import {avatarImage, placesElem, profileSubtitle, profileTitle, userId} from "../pages";
 
 const page = document.querySelector('.page');
@@ -41,7 +41,7 @@ export function profileSubmitHandler(evt) {
     const secondInput = getPopupInput(inputs, 'secondFormInput');
 
     loadingButton(evt.target, true);
-    saveProfileInfo(firstInput.value, secondInput.value)
+    api.saveProfileInfo(firstInput.value, secondInput.value)
         .then(profileInfo => {
             profileTitle.textContent = profileInfo.name;
             profileSubtitle.textContent = profileInfo.about;
@@ -56,13 +56,11 @@ export function cardSubmitHandler(evt) {
     const firstInput = getPopupInput(inputs, 'firstFormInput');
     const secondInput = getPopupInput(inputs, 'secondFormInput');
     loadingButton(evt.target, true);
-    saveCard(firstInput.value, secondInput.value)
+    api.saveCard(firstInput.value, secondInput.value)
         .then(cardInfo => {
+            const newCard = new Card(cardInfo, userId, '#place-card', apiFunctions);
             placesElem.prepend(
-                createPlace(
-                    cardInfo,
-                    userId
-                )
+                newCard.generate()
             );
             close(cardPopup);
             clearInputs(inputs);
@@ -75,7 +73,7 @@ export function avatarSubmitHandler(evt) {
     evt.preventDefault();
     const avatarLinkInput = evt.target.querySelector('.popup__input');
     loadingButton(evt.target, true);
-    updateAvatar(avatarLinkInput.value)
+    api.updateAvatar(avatarLinkInput.value)
         .then(_ => {
             avatarImage.src = avatarLinkInput.value;
             clearInputs([avatarLinkInput]);
