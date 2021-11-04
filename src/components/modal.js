@@ -1,4 +1,4 @@
-import {allPopups, avatarPopup, cardPopup, Card, profilePopup} from "./card";
+import {allPopups, avatarPopup, cardPopup, Card, profilePopup} from "./Card";
 import {api, apiFunctions} from "./api";
 import {avatarImage, placesElem, profileSubtitle, profileTitle, userId} from "../pages";
 

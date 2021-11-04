@@ -1,5 +1,5 @@
 import './index.css';
-import {changeButtonState, checkInputValidity, enableValidation} from "../components/validation";
+// import {changeButtonState, checkInputValidity, enableValidation} from "../components/validation";
 import {api} from "../components/api";
 
 import {
@@ -11,8 +11,22 @@ import {
     open,
     closeOnOverlay
 } from "../components/modal";
-import {allPopups, avatarPopup, cardPopup, profilePopup, renderCards} from "../components/card";
+import {allPopups, avatarPopup, cardPopup, profilePopup, renderCards} from "../components/Card";
+import {FormValidator} from "../components/FormValidator";
 
+//TODO перенести эти объекты в более подходящее место
+const formValidationSetting = {
+    formInputSelector: ".popup__input",
+    submitButtonSelector: ".button__save",
+    inactiveButtonClass: "button_state_inactive",
+    inputErrorClass: "popup__input_type_error"
+}
+const profileFormValidator = new FormValidator(formValidationSetting, profilePopup);
+const cardFormValidator = new FormValidator(formValidationSetting, cardPopup);
+const avatarFormValidator = new FormValidator(formValidationSetting, avatarPopup);
+profileFormValidator.enableValidation();
+cardFormValidator.enableValidation();
+avatarFormValidator.enableValidation();
 
 const validationSettings = {
     inputSelector: '.popup__input',
@@ -65,16 +79,8 @@ avatarPopup.addEventListener('submit', avatarSubmitHandler);
 editButton.addEventListener('click', _ => {
     inputNameElem.value = profileTitle.textContent;
     inputJobElem.value = profileSubtitle.textContent;
-    checkInputValidity(
-        profilePopup,
-        profilePopupInputs,
-        validationSettings.inputErrorClass
-    );
-    changeButtonState(
-        [inputNameElem, inputJobElem],
-        profileSaveButton,
-        validationSettings.inactiveButtonClass
-    );
+    profileFormValidator.checkInputValidity();
+    profileFormValidator.changeButtonState();
     open(profilePopup)
 });
 
@@ -84,19 +90,11 @@ closeButtons.forEach(button => {
     });
 });
 addButton.addEventListener('click', _ => {
-    changeButtonState(
-        cardPopupInputs,
-        cardSaveButton,
-        validationSettings.inactiveButtonClass
-    );
+    cardFormValidator.changeButtonState();
     open(cardPopup);
 });
 avatarOverlay.addEventListener('click', _ => {
-        changeButtonState(
-            [avatarFormInput],
-            cardSaveButton,
-            validationSettings.inactiveButtonClass
-        );
+        avatarFormValidator.changeButtonState();
         open(avatarPopup);
     }
 );
@@ -105,4 +103,3 @@ allPopups.forEach(popup => {
 });
 
 
-enableValidation(validationSettings);
