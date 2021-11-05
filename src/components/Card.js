@@ -1,32 +1,19 @@
-/*-------------------------------Popups-----------------------------------*/
-import {placesElem, userId} from "../pages";
-import {open} from "./modal";
-import {apiFunctions} from "./api";
 
 export const imagePopup = document.querySelector('.popup_type_image');
 export const profilePopup = document.querySelector('.popup_type_profile');
 export const cardPopup = document.querySelector('.popup_type_card');
 export const avatarPopup = document.querySelector('.popup_type_avatar');
 export const allPopups = document.querySelectorAll('.popup');
-const imagePopupElem = imagePopup.querySelector('.popup__image');
-const imagePopupCaptionElem = imagePopup.querySelector('.popup__image-caption');
 
-export function renderCards(initialCards) {
-    Array.from(initialCards).forEach(cardInfo => {
-        const card = new Card(cardInfo, userId,'#place-card', apiFunctions);
-        placesElem.prepend(
-            card.generate()
-        );
-    });
-}
 
 export class Card {
-    constructor(data, userId, selector, { addOrDeleteLike, deleteCard }) {
+    constructor(data, userId, selector, { addOrDeleteLike, deleteCard, handleCardClick }) {
         this._selector = selector;
         this._data = data;
         this._userId = userId;
         this._addOrDeleteLike = addOrDeleteLike;
         this._deleteCard = deleteCard;
+        this._handleCardClick = handleCardClick;
     }
 
     _getElement() {
@@ -108,17 +95,12 @@ export class Card {
             });
     }
 
-    //TODO Когда дойдем до Popup класса нужно этот листенер передать в классе Card как callback функцию handleCardClick
     _setEventListenerOpenPopup(nextCard) {
         //Добавляем обработчик для открытия попапа по клику на картинку
         const cardImage = nextCard.querySelector('.place__image-link');
         cardImage.addEventListener('click', _ => {
-            imagePopupElem.src = this._data.link;
-            imagePopupElem.alt = this._data.name;
-            imagePopupCaptionElem.textContent = this._data.name;
-            open(imagePopup)
-            }
-        );
+            this._handleCardClick(this._data.link, this._data.name);
+        });
     }
 }
 

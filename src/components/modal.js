@@ -1,5 +1,5 @@
 import {allPopups, avatarPopup, cardPopup, Card, profilePopup} from "./Card";
-import {api, apiFunctions} from "./api";
+import {api, apiFunctions} from "./Api";
 import {avatarImage, placesElem, profileSubtitle, profileTitle, userId} from "../pages";
 
 const page = document.querySelector('.page');
