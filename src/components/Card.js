@@ -1,14 +1,14 @@
-
-export const imagePopup = document.querySelector('.popup_type_image');
-export const profilePopup = document.querySelector('.popup_type_profile');
-export const cardPopup = document.querySelector('.popup_type_card');
-export const avatarPopup = document.querySelector('.popup_type_avatar');
-export const allPopups = document.querySelectorAll('.popup');
-
-
 export class Card {
-    constructor(data, userId, selector, { addOrDeleteLike, deleteCard, handleCardClick }) {
-        this._selector = selector;
+    /**
+     * @param data - информация о карточке
+     * @param userId - идентификатор пользователя
+     * @param cardTemplateSelector - селектор шаблона карточки
+     * @param addOrDeleteLike - callback функция для добавления/удаления лайков
+     * @param deleteCard - callback функция удаления карточки
+     * @param handleCardClick - callback функция обработки клика на карточку(в текущей реализации открывает попап с картинкой)
+     */
+    constructor(data, userId, cardTemplateSelector, { addOrDeleteLike, deleteCard, handleCardClick }) {
+        this._selector = cardTemplateSelector;
         this._data = data;
         this._userId = userId;
         this._addOrDeleteLike = addOrDeleteLike;
