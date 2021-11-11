@@ -2,9 +2,16 @@
  *  Класс для настройки валидации полей формы
  */
 export class FormValidator {
+    /**
+     * @param formInputSelector - селектор инпутов в форме
+     * @param submitButtonSelector - селектор кнопки сабмита
+     * @param inactiveButtonClass - класс кнопки в задизейбленном состоянии
+     * @param inputErrorClass - класс, отвечающий за отображение ошибки, которая появляется под инпутом в случае ошибок валидации
+     * @param formElement - элемент формы, которую нужно провалидировать
+     */
     constructor(
-        { formInputSelector, submitButtonSelector, inactiveButtonClass, inputErrorClass },//объект настроек с селекторами и классами формы + применяем деструктуризацию
-        formElement// форма, которую нужно провалидировать
+        {formInputSelector, submitButtonSelector, inactiveButtonClass, inputErrorClass},
+        formElement
     ) {
         this._formInputs = Array.from(formElement.querySelectorAll(formInputSelector));
         this._inputErrorClass = inputErrorClass;
