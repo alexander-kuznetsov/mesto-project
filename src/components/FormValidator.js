@@ -38,14 +38,16 @@ export class FormValidator {
         }
     }
 
-    checkInputValidity() {
-        this._formInputs.forEach(inputElement => {
-            if (inputElement.validity.valid) {
-                this._hideError(inputElement);
-            } else {
-                this._showError(inputElement);
-            }
-        })
+    checkFormValidity() {
+        this._formInputs.forEach(inputElement => this._checkInputValidity(inputElement));
+    }
+
+    _checkInputValidity(inputElement) {
+        if (inputElement.validity.valid) {
+            this._hideError(inputElement);
+        } else {
+            this._showError(inputElement);
+        }
     }
 
     _showError(inputElement) {
@@ -62,7 +64,7 @@ export class FormValidator {
 
     _addEventListener(inputElement) {
         inputElement.addEventListener('input', _ => {
-            this.checkInputValidity();
+            this._checkInputValidity(inputElement);
             this.changeButtonState();
         });
     }

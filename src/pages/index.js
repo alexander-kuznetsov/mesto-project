@@ -61,15 +61,20 @@ profileFormValidator.enableValidation();
 cardFormValidator.enableValidation();
 avatarFormValidator.enableValidation();
 
+
+const popupWithImage = new PopupWithImage('.popup_type_image');
+popupWithImage.setEventListeners();
 /*-------------------------------Rendering-----------------------------------*/
 const cardFunctions = {
     addOrDeleteLike: (cardId, method) => { return api.addOrDeleteLike(cardId, method) },
     deleteCard: (cardId) => { return api.deleteCard(cardId)},
     handleCardClick: (link, name) => {
-        const popupWithImage = new PopupWithImage('.popup_type_image', link, name);
-        popupWithImage.setEventListeners();
-        popupWithImage.open();
+        popupWithImage.open(link, name);
     }
+}
+
+function createCard(cardInfo) {
+    return new Card(cardInfo, userId, '#place-card', cardFunctions);
 }
 
 Promise.all([user.getUserInfo(), api.getInitialCards()])
@@ -86,7 +91,7 @@ Promise.all([user.getUserInfo(), api.getInitialCards()])
             {
                 items: Array.from(cardsArray),
                 renderer: (cardInfo) => {
-                    const card = new Card(cardInfo, userId,'#place-card', cardFunctions);
+                    const card = createCard(cardInfo);
                     return card.generate();
                 }
             },
@@ -113,7 +118,8 @@ const cardPopup = new PopupWithForm(
         cardPopup.loadingButton(true);
         api.saveCard(firstInputValue, secondInputValue)
             .then(cardInfo => {
-                const newCard = new Card(cardInfo, userId, '#place-card', apiFunctions);
+                const newCard = createCard(cardInfo);
+
                 placesElem.prepend(
                     newCard.generate()
                 );
@@ -159,7 +165,7 @@ profilePopup.setEventListeners();
 editButton.addEventListener('click', _ => {
     inputNameElem.value = profileTitle.textContent;
     inputJobElem.value = profileSubtitle.textContent;
-    profileFormValidator.checkInputValidity();
+    profileFormValidator.checkFormValidity();
     profileFormValidator.changeButtonState();
     profilePopup.open()
 });

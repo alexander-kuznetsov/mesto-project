@@ -26,12 +26,7 @@ export class Card {
 
     generate() {
         const element = this._getElement();
-        this._setEventListenerLike(element);
-        this._setEventListenerOpenPopup(element);
-
-        if (this._userId === this._data.owner._id) {
-            this._setEventListenerRemoveButton(element);
-        }
+        this._setEventListeners(element);
 
         return element;
     }
@@ -67,7 +62,11 @@ export class Card {
         }
     }
 
-    _setEventListenerLike(nextCard) {
+    _setEventListeners(nextCard) {
+        if (this._userId === this._data.owner._id) {
+            this._setEventListenerRemoveButton(nextCard);
+        }
+
         //Добавляем обработчик лайков
         nextCard.querySelector('.button__like')
             .addEventListener('click', evt => {
@@ -83,6 +82,12 @@ export class Card {
                         buttonLike.classList.toggle('button__like_active');
                     }).catch(err => console.log(err));
             });
+
+        //Добавляем обработчик для открытия попапа по клику на картинку
+        const cardImage = nextCard.querySelector('.place__image-link');
+        cardImage.addEventListener('click', _ => {
+            this._handleCardClick(this._data.link, this._data.name);
+        });
     }
 
     _setEventListenerRemoveButton(nextCard) {
@@ -93,14 +98,6 @@ export class Card {
                     .then(() => evt.target.closest('.place').remove())
                     .catch(err => console.log(err));
             });
-    }
-
-    _setEventListenerOpenPopup(nextCard) {
-        //Добавляем обработчик для открытия попапа по клику на картинку
-        const cardImage = nextCard.querySelector('.place__image-link');
-        cardImage.addEventListener('click', _ => {
-            this._handleCardClick(this._data.link, this._data.name);
-        });
     }
 }
 
