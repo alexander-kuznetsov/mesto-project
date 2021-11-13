@@ -24,7 +24,6 @@ const inputJobElem = profilePopupElem.querySelector('[name="secondFormInput"]');
 
 const editButton = document.querySelector('.button__edit');
 const addButton = document.querySelector('.button__add');
-const placesElem = document.querySelector('.places');
 let userId;
 
 const options = {
@@ -77,27 +76,25 @@ function createCard(cardInfo) {
     return new Card(cardInfo, userId, '#place-card', cardFunctions);
 }
 
+const cardsSection = new Section(
+    (cardInfo) => {
+        const card = createCard(cardInfo);
+        return card.generate();
+    }
+,
+'.places'
+);
+
 Promise.all([user.getUserInfo(), api.getInitialCards()])
     .then(resultArray => {
         const userInfo = resultArray[0];
-        profileTitle.textContent = userInfo.name;
-        profileSubtitle.textContent = userInfo.about;
-        avatarImage.src = userInfo.avatar
+        user.setUserInfo({userName: userInfo.name, userDetails: userInfo.about},false);
+        user.setUserAvatar(userInfo.avatar,false);
         userId = userInfo._id;
 
         const cardsArray = resultArray[1];
 
-        const cards = new Section(
-            {
-                items: Array.from(cardsArray),
-                renderer: (cardInfo) => {
-                    const card = createCard(cardInfo);
-                    return card.generate();
-                }
-            },
-            '.places'
-        );
-        cards.rendererItems();
+        cardsSection.renderItems(Array.from(cardsArray));
         }
     ).catch(err => console.log(err));
 
@@ -120,9 +117,7 @@ const cardPopup = new PopupWithForm(
             .then(cardInfo => {
                 const newCard = createCard(cardInfo);
 
-                placesElem.prepend(
-                    newCard.generate()
-                );
+                cardsSection.renderItems(Array.from(newCard));
                 cardPopup.close();
             })
             .catch(err => console.log(err))
@@ -163,11 +158,13 @@ profilePopup.setEventListeners();
 
 /*-------------------------------Event Listeners-----------------------------------*/
 editButton.addEventListener('click', _ => {
-    inputNameElem.value = profileTitle.textContent;
-    inputJobElem.value = profileSubtitle.textContent;
-    profileFormValidator.checkFormValidity();
-    profileFormValidator.changeButtonState();
-    profilePopup.open()
+    user.setUserInfoToProfilePopup(inputNameElem,inputJobElem)
+    .then (() =>{
+        profileFormValidator.checkFormValidity();
+        profileFormValidator.changeButtonState();
+        profilePopup.open()
+    })    
+    .catch(err => console.log(err));
 });
 
 addButton.addEventListener('click', _ => {

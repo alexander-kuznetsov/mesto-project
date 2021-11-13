@@ -39,12 +39,26 @@ export class UserInfo {
      *
      * @returns промис выполнения запроса к серверу
      */
-    setUserInfo({userName, userDetails}) {
+    setUserInfo({userName, userDetails},shouldUpdate) {
+        if(shouldUpdate){
         return this._saveUserInfo(userName, userDetails)
             .then(savedUserInfo => {
                 this._userNameElement.textContent = savedUserInfo.name;
                 this._userDetailsElement.textContent = savedUserInfo.about;
             }).catch(err => console.log(err));
+        }
+        else {
+            this._userNameElement.textContent = userName;
+            this._userDetailsElement.textContent = userDetails;
+        }
+    }
+
+    setUserInfoToProfilePopup(inputName,inputJob){
+       return this._getUserInfo()
+        .then ((userInfo) =>{
+            inputName.value =userInfo.name;
+            inputJob.value = userInfo.about;
+        })    
     }
 
     /**
@@ -52,10 +66,15 @@ export class UserInfo {
      * @param userAvatarLink - ссылка на новый аватар
      * @returns промис выполнения запроса к серверу
      */
-    setUserAvatar(userAvatarLink) {
+    setUserAvatar(userAvatarLink,shouldUpdate) {
+        if(shouldUpdate){
         return this._updateAvatar(userAvatarLink)
             .then(_ => {
                 this._userAvatarElement.src = userAvatarLink;
             }).catch(err => console.log(err));
+        }
+        else{
+            this._userAvatarElement.src = userAvatarLink;
+        }
     }
 }
