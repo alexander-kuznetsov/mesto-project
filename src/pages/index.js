@@ -12,11 +12,6 @@ import {PopupWithForm} from "../components/PopupWithForm";
 const profilePopupElem = document.querySelector('.popup_type_profile');
 const cardPopupElem = document.querySelector('.popup_type_card');
 const avatarPopupElem = document.querySelector('.popup_type_avatar');
-
-const profileTitle = document.querySelector('.profile__title');
-const profileSubtitle = document.querySelector('.profile__subtitle');
-
-const avatarImage = document.querySelector('.profile__image');
 const avatarOverlay = document.querySelector('.profile__image-overlay');
 
 const inputNameElem = profilePopupElem.querySelector('[name="firstFormInput"]');
@@ -86,7 +81,13 @@ const cardsSection = new Section(
 Promise.all([user.getUserInfo(), api.getInitialCards()])
     .then(resultArray => {
         const userInfo = resultArray[0];
-        user.setUserInfo({userName: userInfo.name, userDetails: userInfo.about},false);
+        user.setUserInfo(
+            {
+                userName: userInfo.name,
+                userDetails: userInfo.about
+            },
+            false
+        );
         user.setUserAvatar(userInfo.avatar,false);
         userId = userInfo._id;
 
@@ -128,9 +129,10 @@ const avatarPopup = new PopupWithForm(
         evt.preventDefault();
         const avatarLinkValue = inputValuesArray[0];
         avatarPopup.loadingButton(true);
-        user.setUserAvatar(avatarLinkValue)
+        user.setUserAvatar(avatarLinkValue, true)
             .then(() => avatarPopup.close())
-            .finally(() => avatarPopup.loadingButton(false));
+            .finally(() => avatarPopup.loadingButton(false))
+            .catch(err => console.log(err));
     }
 );
 avatarPopup.setEventListeners();
@@ -144,9 +146,10 @@ const profilePopup = new PopupWithForm(
             userDetails: inputValues[1]
         };
         profilePopup.loadingButton(true);
-        user.setUserInfo(userInfo)
+        user.setUserInfo(userInfo, true)
             .then(() => profilePopup.close())
-            .finally(() => profilePopup.loadingButton(false));
+            .finally(() => profilePopup.loadingButton(false))
+            .catch(err => console.log(err));
     }
 );
 profilePopup.setEventListeners();
