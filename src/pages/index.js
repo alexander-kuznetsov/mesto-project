@@ -80,9 +80,7 @@ const cardsSection = new Section(
     (cardInfo) => {
         const card = createCard(cardInfo);
         return card.generate();
-    }
-,
-'.places'
+    },'.places'
 );
 
 Promise.all([user.getUserInfo(), api.getInitialCards()])
@@ -115,9 +113,7 @@ const cardPopup = new PopupWithForm(
         cardPopup.loadingButton(true);
         api.saveCard(firstInputValue, secondInputValue)
             .then(cardInfo => {
-                const newCard = createCard(cardInfo);
-
-                cardsSection.renderItems(Array.from(newCard));
+                cardsSection.renderItems(Array.of(cardInfo));
                 cardPopup.close();
             })
             .catch(err => console.log(err))
