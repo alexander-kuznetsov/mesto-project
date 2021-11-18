@@ -17,22 +17,21 @@ export class Card {
     }
 
     _getElement() {
-        const nextCard = document.querySelector(this._selector)
+        this.element = document.querySelector(this._selector)
             .content
             .cloneNode(true);
-        this._setCardContent(nextCard);
-        return nextCard;
+        this._setCardContent();
+        return this.element
     }
 
     generate() {
-        const element = this._getElement();
-        this._setEventListeners(element);
-
-        return element;
+        this.element = this._getElement();
+        this._setEventListeners();
+        return this.element
     }
 
-    _setCardContent(nextCard) {
-        const place = nextCard.querySelector('.place');
+    _setCardContent() {
+        const place = this.element.querySelector('.place');
         place.id = this._data._id; //задаем идентификатор элементу place
 
         //добавляем карточке картинку места и его название
@@ -62,13 +61,13 @@ export class Card {
         }
     }
 
-    _setEventListeners(nextCard) {
+    _setEventListeners() {
         if (this._userId === this._data.owner._id) {
-            this._setEventListenerRemoveButton(nextCard);
+            this._setEventListenerRemoveButton();
         }
 
         //Добавляем обработчик лайков
-        nextCard.querySelector('.button__like')
+        this.element.querySelector('.button__like')
             .addEventListener('click', evt => {
                 const buttonLike = evt.target;
                 const method = buttonLike.classList
@@ -84,15 +83,15 @@ export class Card {
             });
 
         //Добавляем обработчик для открытия попапа по клику на картинку
-        const cardImage = nextCard.querySelector('.place__image-link');
+        const cardImage = this.element.querySelector('.place__image-link');
         cardImage.addEventListener('click', _ => {
             this._handleCardClick(this._data.link, this._data.name);
         });
     }
 
-    _setEventListenerRemoveButton(nextCard) {
+    _setEventListenerRemoveButton() {
         //Добавляем обработчик для кнопки удаления карточки
-        nextCard.querySelector('.button__remove')
+        this.element.querySelector('.button__remove')
             .addEventListener('click', evt => {
                 this._deleteCard(this._data._id)
                     .then(() => evt.target.closest('.place').remove())

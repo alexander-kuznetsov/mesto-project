@@ -8,6 +8,8 @@ export class PopupWithForm extends Popup{
   constructor(popupSelector, submitForm){
     super(popupSelector);
     this._submitForm = submitForm;
+    this.button = this._popupElement.querySelector('.button');
+    this.buttonText = this.button.textContent;
   }
 
   _getInputValues(){
@@ -23,9 +25,8 @@ export class PopupWithForm extends Popup{
     );
   }
   loadingButton(isLoading) {
-    const button = this._popupElement.querySelector('.button');
-    const buttonText = button.textContent;
-    button.textContent = isLoading? `${buttonText}...`: buttonText.substring(0, buttonText.length - 3);
+    this.button.textContent = isLoading? `${this.buttonText}...`: this.buttonText.substring(0, this.buttonText.length - 3);
+    //в этой строчке при создании карточки на несколько секунд появляеется слово Созд, заместо Создать...
   }
   close(){
     super.close();
