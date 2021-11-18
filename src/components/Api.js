@@ -68,7 +68,7 @@ export class Api {
     }
 
     addOrDeleteLike(cardId, method) {
-        return  fetch(
+        return fetch(
             `${this._baseUrl}/cards/likes/${cardId}`,
             {
                 method: method,

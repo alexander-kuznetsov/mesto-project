@@ -28,6 +28,6 @@ export class Section {
      * @param element DOM-элемент, который необходимо добавить
      */
     addItem(element) {
-        this._container.append(element);
+        this._container.prepend(element);
     }
 }

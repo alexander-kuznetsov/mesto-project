@@ -8,12 +8,14 @@ export class PopupWithForm extends Popup{
   constructor(popupSelector, submitForm){
     super(popupSelector);
     this._submitForm = submitForm;
-    this.button = this._popupElement.querySelector('.button');
-    this.buttonText = this.button.textContent;
+    this._popupInputs = this._popupElement.querySelectorAll('.popup__input');
+    this._buttonElement = this._popupElement.querySelector('.button');
+    this._popupFormElement = this._popupElement.querySelector('.popup__form');
+    this._buttonText = this._buttonElement.textContent;
   }
 
   _getInputValues(){
-    return Array.from(this._popupElement.querySelectorAll('.popup__input'))
+    return Array.from(this._popupInputs)
         .map(inputElement => inputElement.value)
   }
 
@@ -25,13 +27,11 @@ export class PopupWithForm extends Popup{
     );
   }
   loadingButton(isLoading) {
-    this.button.textContent = isLoading? `${this.buttonText}...`: this.buttonText.substring(0, this.buttonText.length - 3);
-    //в этой строчке при создании карточки на несколько секунд появляеется слово Созд, заместо Создать...
+    this._buttonElement.textContent = isLoading? `${this._buttonText}...`: this._buttonText.substring(0, this._buttonText.length - 3);
+    //На несколько секунд в конце заместо Создать.. появляется Созд
   }
   close(){
     super.close();
-    this._popupElement
-        .querySelector('.popup__form')
-        .reset();
+    this._popupFormElement.reset();
   }
 }

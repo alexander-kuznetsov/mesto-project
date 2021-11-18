@@ -36,16 +36,16 @@ export class UserInfo {
      * @param userName - имя пользователя
      * @param userDetails - информация о пользователе
      * @param userAvatar - ссылка на новый аватар
-     *
+     * @param shouldUpdate - true/false флаг позволяет производить задавать пользовательские данные с сохранением на сервере или без него
      * @returns промис выполнения запроса к серверу
      */
-    setUserInfo({userName, userDetails},shouldUpdate) {
+    setUserInfo({userName, userDetails}, shouldUpdate) {
         if(shouldUpdate){
         return this._saveUserInfo(userName, userDetails)
             .then(savedUserInfo => {
                 this._userNameElement.textContent = savedUserInfo.name;
                 this._userDetailsElement.textContent = savedUserInfo.about;
-            }).catch(err => console.log(err));
+            });
         }
         else {
             this._userNameElement.textContent = userName;
@@ -58,22 +58,23 @@ export class UserInfo {
         .then ((userInfo) =>{
             inputName.value =userInfo.name;
             inputJob.value = userInfo.about;
-        })    
+        });
     }
 
     /**
      * Метод сохранения новой аватарки на сервере
      * @param userAvatarLink - ссылка на новый аватар
+     * @param shouldUpdate - true/false флаг позволяет производить задавать пользовательские данные с сохранением на сервере или без него
      * @returns промис выполнения запроса к серверу
      */
-    setUserAvatar(userAvatarLink,shouldUpdate) {
+    setUserAvatar(userAvatarLink, shouldUpdate) {
         if(shouldUpdate){
         return this._updateAvatar(userAvatarLink)
             .then(_ => {
                 this._userAvatarElement.src = userAvatarLink;
-            }).catch(err => console.log(err));
+            });
         }
-        else{
+        else {
             this._userAvatarElement.src = userAvatarLink;
         }
     }
