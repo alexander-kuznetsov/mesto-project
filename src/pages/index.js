@@ -107,12 +107,10 @@ const apiFunctions = {
 
 const cardPopup = new PopupWithForm(
     '.popup_type_card',
-    (evt, inputValuesArray) => {
+    (evt, formValues) => {
         evt.preventDefault();
-        const firstInputValue = inputValuesArray[0];
-        const secondInputValue = inputValuesArray[1];
         cardPopup.loadingButton(true);
-        api.saveCard(firstInputValue, secondInputValue)
+        api.saveCard(formValues.firstFormInput, formValues.secondFormInput)
             .then(cardInfo => {
                 cardsSection.renderItems(Array.of(cardInfo));
                 cardPopup.close();
@@ -125,11 +123,10 @@ cardPopup.setEventListeners();
 
 const avatarPopup = new PopupWithForm(
     '.popup_type_avatar',
-    (evt, inputValuesArray) => {
+    (evt, formValues) => {
         evt.preventDefault();
-        const avatarLinkValue = inputValuesArray[0];
         avatarPopup.loadingButton(true);
-        user.setUserAvatar(avatarLinkValue, true)
+        user.setUserAvatar(formValues.firstFormInput, true)
             .then(() => avatarPopup.close())
             .finally(() => avatarPopup.loadingButton(false))
             .catch(err => console.log(err));
@@ -139,11 +136,11 @@ avatarPopup.setEventListeners();
 
 const profilePopup = new PopupWithForm(
     '.popup_type_profile',
-    (evt, inputValues) => {
+    (evt, formValues) => {
         evt.preventDefault();
         const userInfo = {
-            userName: inputValues[0],
-            userDetails: inputValues[1]
+            userName: formValues.firstFormInput,
+            userDetails: formValues.secondFormInput
         };
         profilePopup.loadingButton(true);
         user.setUserInfo(userInfo, true)

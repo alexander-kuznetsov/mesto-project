@@ -15,8 +15,10 @@ export class PopupWithForm extends Popup{
   }
 
   _getInputValues(){
-    return Array.from(this._popupInputs)
-        .map(inputElement => inputElement.value)
+    const formValues = {};
+    Array.from(this._popupInputs)
+        .forEach(inputElement => formValues[inputElement.name] = inputElement.value)
+    return formValues;
   }
 
   setEventListeners(){
@@ -27,8 +29,7 @@ export class PopupWithForm extends Popup{
     );
   }
   loadingButton(isLoading) {
-    this._buttonElement.textContent = isLoading? `${this._buttonText}...`: this._buttonText.substring(0, this._buttonText.length - 3);
-    //На несколько секунд в конце заместо Создать.. появляется Созд
+    this._buttonElement.textContent = isLoading? `${this._buttonText}...`: this._buttonText;
   }
   close(){
     super.close();

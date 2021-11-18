@@ -6,14 +6,14 @@ export default class Popup {
     constructor(popupSelector) {
         this._popupElement = document.querySelector(popupSelector);
         this._page = document.querySelector('.page');
+        this._handleEscClose = this._handleEscClose.bind(this)
     }
 
     /**
      * Метод открытия попапа
      */
     open() {
-        this._bindedHandleEscClose = this._handleEscClose.bind(this);//привязка контекста bind изменяет сигнатуру функции, из-за этого не отрабатывает removeEventListener в методе close(). Поэтому после привязки контекста сохраняем новую функцию в локальную переменную класса и ее же перелаем в removeEventListener
-        this._page.addEventListener('keydown', this._bindedHandleEscClose);
+        this._page.addEventListener('keydown', this._handleEscClose);
         this._popupElement.classList.add('popup_opened');
     }
 
@@ -21,7 +21,7 @@ export default class Popup {
      * Метод закрытия попапа
      */
     close() {
-        this._page.removeEventListener('keydown', this._bindedHandleEscClose);
+        this._page.removeEventListener('keydown', this._handleEscClose);
         this._popupElement.classList.remove('popup_opened');
     }
 
